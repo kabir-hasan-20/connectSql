@@ -1,0 +1,188 @@
+*{
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 1.1rem;
+}
+.mainBox{
+  background-color: rgb(55, 156, 156);
+  border-radius: 5px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  color: white;
+}
+/* .mgsBox{
+  
+  height: 100%;
+  width: 100%;
+  
+} */
+.allComment{
+  background-color: rgb(55, 156, 156);
+  height: 25vh;
+  width: 30%;
+  border-radius: 5px;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  color: white;
+}
+.solid-heard{
+  display: none;
+}
+.like-icon{
+  display: inline-block;
+}
+.regular-like{
+  display: none;
+}
+.fa-heart{
+  cursor: pointer;
+  color:red;
+}
+.allButton{
+  display: flex;
+  flex-direction: row;
+  gap:1rem;
+}
+/* profile */
+body{
+    background: #f5f7fb;
+}
+
+.card{
+    transition: 0.3s;
+}
+
+.card:hover{
+    transform: translateY(-5px);
+}
+
+img{
+    object-fit: cover;
+}
+/* all comment */
+body{
+    background:#f4f7fb;
+}
+
+.post-card{
+    transition:0.3s;
+}
+
+.post-card:hover{
+    transform:translateY(-5px);
+}
+
+.like-icon{
+    transition:0.2s;
+}
+
+.like-icon:hover{
+    transform:scale(1.2);
+}
+
+.card{
+    overflow:hidden;
+}
+/* allcomment */
+body{
+    background:#f5f7fb;
+}
+
+.comment-card{
+    transition:0.3s;
+}
+
+.comment-card:hover{
+    transform:translateY(-4px);
+}
+
+.card{
+    overflow:hidden;
+}
+
+textarea{
+    resize:none;
+}
+/* login */
+body{
+    background:#f4f7fb;
+}
+
+.card{
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.form-control{
+    border-radius:12px;
+}
+
+.form-control:focus{
+    box-shadow:none;
+    border-color:#198754;
+}
+/* signup */
+body{
+    background:#f4f7fb;
+}
+
+.card{
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.form-control{
+    border-radius:12px;
+}
+
+.form-control:focus{
+    box-shadow:none;
+    border-color:#198754;
+}
+/* navbar */
+.navbar{
+    padding:14px 0;
+}
+
+.navbar-brand{
+    letter-spacing:1px;
+}
+
+.nav-hover{
+    position:relative;
+    transition:0.3s;
+}
+
+.nav-hover::after{
+    content:"";
+    position:absolute;
+    left:0;
+    bottom:0;
+    width:0%;
+    height:2px;
+    background:#198754;
+    transition:0.3s;
+}
+
+.nav-hover:hover::after{
+    width:100%;
+}
+
+.nav-hover:hover{
+    color:#198754 !important;
+}
+
+.navbar .btn{
+    transition:0.3s;
+}
+
+.navbar .btn:hover{
+    transform:translateY(-2px);
+}

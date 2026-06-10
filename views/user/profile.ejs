@@ -1,0 +1,115 @@
+<% layout('layouts/boilarplate') %>
+
+<div class="container py-5">
+
+  <!-- Profile Section -->
+  <div class="card shadow-lg border-0 rounded-4 mb-5">
+    <div class="card-body text-center p-5">
+
+      <!-- Profile Image -->
+      <div class="mb-4">
+
+        <% if(userInfo[0].profile_img){ %>
+
+          <img 
+            src="<%= userInfo[0].profile_img %>" 
+            class="rounded-circle shadow border border-3"
+            width="130"
+            height="130"
+            alt="profile"
+            style="object-fit: cover;"
+          >
+
+        <% } else { %>
+
+          <img 
+            src="https://ui-avatars.com/api/?name=<%= userInfo[0].username %>&background=0D8ABC&color=fff&size=120" 
+            class="rounded-circle shadow border border-3"
+            width="130"
+            height="130"
+            alt="profile"
+          >
+
+        <% } %>
+
+      </div>
+
+      <!-- Upload Profile Picture -->
+      <form 
+        action="/profile/upload/<%= userInfo[0].id %>" 
+        method="post" 
+        enctype="multipart/form-data"
+        class="mb-4"
+      >
+
+        <div class="d-flex justify-content-center gap-2 flex-wrap">
+
+          <input 
+            type="file" 
+            name="profile" 
+            class="form-control w-auto"
+            accept="image/*"
+            required
+          >
+
+          <button class="btn btn-primary rounded-pill px-4">
+            Upload
+          </button>
+
+        </div>
+
+      </form>
+
+      <!-- User Info -->
+      <h2 class="fw-bold"><%= userInfo[0].username %></h2>
+      <p class="text-muted"><%= userInfo[0].email %></p>
+
+    </div>
+  </div>
+
+  <!-- Posts -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold">Your All Posts</h1>
+
+    <span class="badge bg-dark fs-6 px-3 py-2">
+      <%= userAllPost.length %> Posts
+    </span>
+  </div>
+
+  <% for(post of userAllPost){ %>
+
+    <div class="card shadow-sm border-0 rounded-4 mb-4">
+      <div class="card-body">
+
+        <p class="fs-5 mb-4">
+          <%= post.discription %>
+        </p>
+
+        <div class="d-flex gap-2">
+
+          <!-- Delete -->
+          <form action="/post/<%= post.post_id %>?_method=DELETE" method="post">
+            <button class="btn btn-danger rounded-pill px-4">
+              Delete
+            </button>
+          </form>
+
+          <!-- Edit -->
+          <% if(currentUser && post.id == currentUser.id){ %>
+
+            <form action="/post/edit/<%= post.post_id %>" method="get">
+              <button class="btn btn-success rounded-pill px-4">
+                Edit
+              </button>
+            </form>
+
+          <% } %>
+
+        </div>
+
+      </div>
+    </div>
+
+  <% } %>
+
+</div>

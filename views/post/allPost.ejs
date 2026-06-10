@@ -1,0 +1,180 @@
+<% layout('layouts/boilarplate') %>
+
+<div class="container py-5">
+
+  <!-- Header -->
+  <div class="d-flex justify-content-between align-items-center mb-5">
+    <h1 class="fw-bold">All Posts</h1>
+
+    <% if(currentUser){ %>
+      <a href="/post/create" class="btn btn-dark rounded-pill px-4">
+        Create Post
+      </a>
+    <% } %>
+  </div>
+
+  <!-- All Posts -->
+  <% for(let post of posts){ %>
+
+    <div class="card border-0 shadow-sm rounded-4 mb-4 post-card">
+
+      <div class="card-body p-4">
+
+        <!-- User Info -->
+        <div class="d-flex align-items-center mb-3">
+
+          <!-- Profile Image -->
+          <% if(post.profile_img){ %>
+
+            <img 
+              src="<%= post.profile_img %>"
+              class="rounded-circle me-3 border"
+              width="55"
+              height="55"
+              style="object-fit:cover;"
+            >
+
+          <% } else { %>
+
+            <img 
+              src="https://ui-avatars.com/api/?name=<%= post.username %>&background=random"
+              class="rounded-circle me-3 border"
+              width="55"
+              height="55"
+            >
+
+          <% } %>
+
+          <div>
+            <h5 class="mb-0 fw-bold">
+              @<%= post.username %>
+            </h5>
+
+            <small class="text-muted">
+              <%= new Date(post.create_at).toLocaleString(
+                "en-GB",
+                {
+                  day:"numeric",
+                  month:"short",
+                  year:"numeric",
+                  hour:"2-digit",
+                  minute:"2-digit"
+                }
+              ) %>
+            </small>
+          </div>
+
+        </div>
+
+        <!-- Post Description -->
+        <p class="fs-5 mb-4">
+          <%= post.discription %>
+        </p>
+
+        <!-- Actions -->
+        <div class="d-flex justify-content-between align-items-center">
+
+          <div class="d-flex align-items-center gap-4">
+
+            <!-- Like -->
+            <div>
+
+              <% let liked=false; %>
+
+              <% if(likeBool){ %>
+
+                <% for(let like of likeBool){ %>
+
+                  <% if(currentUser && currentUser.id==like.id && post.post_id==like.post_id){ %>
+
+                    <% liked=true; %>
+
+                  <% } %>
+
+                <% } %>
+
+              <% } %>
+
+              <% if(liked){ %>
+
+                <i 
+                  class="fa-solid fa-heart like-icon text-danger fs-4"
+                  onclick="likePost(<%=post.post_id%>)"
+                  style="cursor:pointer;"
+                ></i>
+
+              <% } else { %>
+
+                <i 
+                  class="fa-regular fa-heart fs-4"
+                  onclick="likePost(<%=post.post_id%>)"
+                  style="cursor:pointer;"
+                ></i>
+
+              <% } %>
+
+              <% for(let p of countP){ %>
+
+                <% if(p.post_id==post.post_id){ %>
+
+                  <span 
+                    id="count-<%= post.post_id %>"
+                    class="ms-2 fw-bold"
+                  >
+                    <%= p.countPost %>
+                  </span>
+
+                <% } %>
+
+              <% } %>
+
+            </div>
+
+            <!-- Comment -->
+            <a 
+              href="/comment/<%= post.post_id %>"
+              class="text-dark text-decoration-none"
+            >
+              <i class="fa-solid fa-comments fs-4"></i>
+            </a>
+
+          </div>
+
+          <!-- Owner Buttons -->
+          <% if(currentUser && post.id==currentUser.id){ %>
+
+            <div class="d-flex gap-2">
+
+              <!-- Delete -->
+              <form 
+                action="/post/<%= post.post_id %>?_method=DELETE"
+                method="post"
+              >
+                <button class="btn btn-danger rounded-pill px-4">
+                  Delete
+                </button>
+              </form>
+
+              <!-- Edit -->
+              <form 
+                action="/post/edit/<%= post.post_id %>"
+                method="get"
+              >
+                <button class="btn btn-success rounded-pill px-4">
+                  Edit
+                </button>
+              </form>
+
+            </div>
+
+          <% } %>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  <% } %>
+
+</div>

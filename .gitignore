@@ -1,0 +1,4 @@
+.env
+node_modules/
+tm/
+kabirhasan.session.sql

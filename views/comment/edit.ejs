@@ -1,0 +1,8 @@
+<% layout('layouts/boilarplate') %>
+<div class="editComment">
+  <form action="/comment/edit/<%=com[0].comment_id%>/<%=com[0].post_id%>?_method=PUT" method="post"class="needs-validation" novalidate>
+    <label for="comment"class="form-label">Comment</label><br>
+    <textarea name="comment" id="comment" cols="60" rows="8" class="form-control" ><%=com[0].comment %></textarea><br><br>
+    <button class="btn btn-success">Edit</button>
+  </form>
+</div>

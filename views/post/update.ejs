@@ -1,0 +1,18 @@
+<% layout('layouts/boilarplate') %>
+<h1>Edit Your Post</h1>
+<form action="/post/<%= p[0].post_id %>?_method=PUT" method="POST" class="needs-validation" novalidate>
+    <div class="mb-3 col-5">
+    <label for="description" class="form-label">Enter your post</label><br>
+
+    <textarea 
+        name="post[description]" 
+        id="description"
+        rows="10"
+        class="form-control" required
+    ><%= p[0].description %></textarea><br>
+              <div class="invalid-feedback">
+        Please Enter Right Comment
+      </div>
+    <button class="btn btn-success">Update</button>
+    </div>
+</form>

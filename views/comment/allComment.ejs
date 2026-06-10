@@ -1,0 +1,211 @@
+<% layout('layouts/boilarplate') %>
+
+<div class="container py-5">
+
+  <!-- Single Post -->
+  <div class="card shadow-sm border-0 rounded-4 mb-5">
+
+    <div class="card-body p-4">
+
+      <div class="d-flex align-items-center mb-3">
+
+        <% if(single[0].profile_img){ %>
+
+          <img 
+            src="<%= single[0].profile_img %>"
+            class="rounded-circle me-3 border"
+            width="60"
+            height="60"
+            style="object-fit:cover;"
+          >
+
+        <% } else { %>
+
+          <img 
+            src="https://ui-avatars.com/api/?name=<%= single[0].username %>&background=random"
+            class="rounded-circle me-3 border"
+            width="60"
+            height="60"
+          >
+
+        <% } %>
+
+        <div>
+          <h5 class="mb-0 fw-bold">
+            @<%= single[0].username %>
+          </h5>
+
+          <small class="text-muted">
+            Post Details
+          </small>
+        </div>
+
+      </div>
+
+      <p class="fs-5 mb-0">
+        <%= single[0].discription %>
+      </p>
+
+    </div>
+
+  </div>
+
+  <!-- Add Comment -->
+  <div class="card shadow-sm border-0 rounded-4 mb-5">
+
+    <div class="card-body p-4">
+
+      <h3 class="fw-bold mb-4">
+        Add Comment
+      </h3>
+
+      <form 
+        action="/comment/create/<%=single[0].post_id%>" 
+        method="post"
+        class="needs-validation"
+        novalidate
+      >
+
+        <div class="mb-3">
+
+          <label for="comment" class="form-label fw-semibold">
+            Write your comment
+          </label>
+
+          <textarea 
+            name="comment"
+            id="comment"
+            rows="5"
+            class="form-control rounded-3"
+            placeholder="Write something..."
+            required
+          ></textarea>
+
+          <div class="invalid-feedback">
+            Please write a comment.
+          </div>
+
+        </div>
+
+        <button class="btn btn-success rounded-pill px-4">
+          Add Comment
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+  <!-- All Comments -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+
+    <h2 class="fw-bold">
+      All Comments
+    </h2>
+
+    <span class="badge bg-dark px-3 py-2">
+      <%= p.length %> Comments
+    </span>
+
+  </div>
+
+  <% if(p.length){ %>
+
+    <% for(let post of p){ %>
+
+      <div class="card shadow-sm border-0 rounded-4 mb-4 comment-card">
+
+        <div class="card-body p-4">
+
+          <!-- User -->
+          <div class="d-flex align-items-center mb-3">
+
+            <% if(post.profile_img){ %>
+
+              <img 
+                src="<%= post.profile_img %>"
+                class="rounded-circle me-3 border"
+                width="50"
+                height="50"
+                style="object-fit:cover;"
+              >
+
+            <% } else { %>
+
+              <img 
+                src="https://ui-avatars.com/api/?name=<%= post.username %>&background=random"
+                class="rounded-circle me-3 border"
+                width="50"
+                height="50"
+              >
+
+            <% } %>
+
+            <div>
+
+              <h6 class="mb-0 fw-bold">
+                @<%= post.username %>
+              </h6>
+
+              <small class="text-muted">
+                Commented
+              </small>
+
+            </div>
+
+          </div>
+
+          <!-- Comment -->
+          <p class="fs-6 mb-4">
+            <%= post.comment %>
+          </p>
+
+          <!-- Buttons -->
+          <% if(currentUser && post.id == currentUser.id){ %>
+
+            <div class="d-flex gap-2">
+
+              <!-- Delete -->
+              <form 
+                action="/comment/<%= post.comment_id %>/<%=post.post_id%>/<%=post.id%>?_method=DELETE"
+                method="post"
+              >
+
+                <button class="btn btn-danger rounded-pill px-4">
+                  Delete
+                </button>
+
+              </form>
+
+              <!-- Edit -->
+              <form 
+                action="/comment/edit/<%= post.comment_id %>"
+                method="post"
+              >
+
+                <button class="btn btn-success rounded-pill px-4">
+                  Edit
+                </button>
+
+              </form>
+
+            </div>
+
+          <% } %>
+
+        </div>
+
+      </div>
+
+    <% } %>
+
+  <% } else { %>
+
+    <div class="alert alert-secondary rounded-4 shadow-sm">
+      No comments yet.
+    </div>
+
+  <% } %>
+
+</div>
