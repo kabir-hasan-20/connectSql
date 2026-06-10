@@ -10,12 +10,11 @@ cloudinary.config(
 );
 
 const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: 'blogs_DEV',
-    allowerdFormats:["png","jpg","jpeg"]
-    
-  },
+  cloudinary,
+  params: async (req, file) => ({
+    folder: "blogs_DEV",
+    allowed_formats: ["png", "jpg", "jpeg"],
+  }),
 });
 
 module.exports = {cloudinary,storage};
