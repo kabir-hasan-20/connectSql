@@ -30,13 +30,24 @@ router.post("/signup",wrapAsync(async(req,res)=>{
   //   res.redirect("/");
   // });
   req.login(use, (err) => {
+  console.log("LOGIN CALLBACK HIT"); // 👈 এটা আসা উচিত
+
   if (err) {
-    return res.status(500).send(err.message);
+    console.log("LOGIN ERROR:", err);
+    return res.send(err);
   }
 
-  req.flash("success", "Welcome to blogs apps");
+  console.log("USER:", req.user); // 👈 গুরুত্বপূর্ণ
   return res.redirect("/");
 });
+//   req.login(use, (err) => {
+//   if (err) {
+//     return res.status(500).send(err.message);
+//   }
+
+//   req.flash("success", "Welcome to blogs apps");
+//   return res.redirect("/");
+// });
  
 }));
 
