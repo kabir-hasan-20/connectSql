@@ -80,8 +80,7 @@ app.use((err,req,res,next)=>{
   console.log(message,"msg");
 });
 
-// const PORT = process.env.PORT || 3000;
-let PORT = 8080;
+const PORT = process.env.PORT || 3000;
 
 app.listen(PORT,()=>{
    console.log(`Server running on ${PORT}`);
