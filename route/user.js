@@ -30,21 +30,6 @@ router.post("/signup",wrapAsync(async(req,res)=>{
   //   req.flash("success","Welcome to blogs apps");
   //   res.redirect("/");
   // });
-  console.log("1");
-const use = await user.signup(username,email,hash);
-console.log("2", use);
-
-req.login(use, (err) => {
-  console.log("3");
-  
-  if (err) {
-    console.log("LOGIN ERROR", err);
-    return res.status(500).send(err.message);
-  }
-
-  console.log("4");
-  res.redirect("/");
-});
   req.login(use, (err) => {
   if (err) {
     return res.status(500).send(err.message);
