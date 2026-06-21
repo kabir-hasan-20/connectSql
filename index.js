@@ -26,7 +26,7 @@ const flash = require("connect-flash");
 const sessionOpation = {
   secret: process.env.SESSION_SECRET, // This is required for signing the session ID cookie
   resave: false,             // Prevents race conditions, typically set to false
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie:{
     expires:Date.now()+7*24*60*60*1000,
     maxAge:7*24*60*60*1000,
@@ -34,7 +34,13 @@ const sessionOpation = {
   }
 }
 app.use(session(sessionOpation));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(flash());
+// app.use(session(sessionOpation));
+// app.use(flash());
 
 const db = require("./database/db");
 const user = require("./models/user");
@@ -44,7 +50,7 @@ const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
 const {isLogin,isOwner }=require("./middleware");
 
-app.use(passport.initialize());
+// app.use(passport.initialize());
 app.use(passport.session());
 //flash message middleware
 app.use((req,res,next)=>{

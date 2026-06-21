@@ -23,13 +23,21 @@ router.post("/signup",wrapAsync(async(req,res)=>{
   
   const hash = await bcrypt.hash(password,10);
   const use = await user.signup(username,email,hash);
-  req.login(use,(err)=>{
-    if(err){
-      return res.send(err);
-    }
-    req.flash("success","Welcome to blogs apps");
-    res.redirect("/");
-  });
+  // req.login(use,(err)=>{
+  //   if(err){
+  //     return res.send(err);
+  //   }
+  //   req.flash("success","Welcome to blogs apps");
+  //   res.redirect("/");
+  // });
+  req.login(use, (err) => {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
+
+  req.flash("success", "Welcome to blogs apps");
+  return res.redirect("/");
+});
  
 }));
 
@@ -39,6 +47,17 @@ router.get("/login",(req,res)=>{
   res.render("user/login.ejs");
 });
  //login
+// router.post(
+//   "/login",
+//   passport.authenticate("local", {
+//     failureRedirect:"/login",
+//     failureFlash:true
+//   }),
+//   (req,res)=>{
+//     req.flash("success","Welcome back");
+//     res.redirect("/");
+//   }
+// );
 router.post(
   "/login",
   passport.authenticate("local", {
@@ -50,6 +69,7 @@ router.post(
     res.redirect("/");
   }
 );
+
 // logout
 router.get("/logout",(req,res)=>{
   req.logout((err)=>{
