@@ -7,6 +7,7 @@ app.set("views",path.join(__dirname,"views"));
 
 app.use(express.urlencoded({extended:true}));
 app.use(express.static(path.join(__dirname,"public")));
+app.set("trust proxy", 1);
 
 const ejsMate = require('ejs-mate');
 require('dotenv').config();
@@ -23,16 +24,27 @@ const likeRoute = require("./route/like");
 
 const session = require("express-session");
 const flash = require("connect-flash");
+
 const sessionOpation = {
-  secret: process.env.SESSION_SECRET, // This is required for signing the session ID cookie
-  resave: false,             // Prevents race conditions, typically set to false
+  secret: process.env.SESSION_SECRET,
+  resave: false,
   saveUninitialized: false,
-  cookie:{
-    expires:Date.now()+7*24*60*60*1000,
-    maxAge:7*24*60*60*1000,
-    httpOnly:true
+  cookie: {
+    maxAge: 7 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production"
   }
-}
+};
+// const sessionOpation = {
+//   secret: process.env.SESSION_SECRET, // This is required for signing the session ID cookie
+//   resave: false,             // Prevents race conditions, typically set to false
+//   saveUninitialized: false,
+//   cookie:{
+//     expires:Date.now()+7*24*60*60*1000,
+//     maxAge:7*24*60*60*1000,
+//     httpOnly:true
+//   }
+// }
 app.use(session(sessionOpation));
 
 app.use(passport.initialize());
