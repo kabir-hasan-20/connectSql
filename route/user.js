@@ -1,62 +1,51 @@
-// const express = require("express");
-// const router = express.Router({mergeParams:true});
-// const user = require("../models/user");
-// const post = require("../models/post");
-// const wrapAsync = require("../utils/wrapAsync");
-// const{isLogin,isOwner} = require("../middleware");
-// const passport = require("../database/passport");
-// const bcrypt = require("bcrypt");
+const express = require("express");
+const router = express.Router({mergeParams:true});
+const user = require("../models/user");
+const post = require("../models/post");
+const wrapAsync = require("../utils/wrapAsync");
+const{isLogin,isOwner} = require("../middleware");
+const passport = require("../database/passport");
+const bcrypt = require("bcrypt");
 
 
-// const multer = require("multer");
-// const { storage } = require("../cloudeconfig");
-// const upload = multer({ storage });
+const multer = require("multer");
+const { storage } = require("../cloudeconfig");
+const upload = multer({ storage });
 
-// //singup from
-// router.get("/signup",(req,res)=>{
-//   res.render("user/signup.ejs");
-// });
-// // signup
-// router.post("/signup",wrapAsync(async(req,res)=>{
-//   let {username,email,password} = req.body;
+//singup from
+router.get("/signup",(req,res)=>{
+  res.render("user/signup.ejs");
+});
+// signup
+router.post("/signup",wrapAsync(async(req,res)=>{
+  let {username,email,password} = req.body;
   
-//   const hash = await bcrypt.hash(password,10);
-//   const use = await user.signup(username,email,hash);
-//   // req.login(use,(err)=>{
-//   //   if(err){
-//   //     return res.send(err);
-//   //   }
-//   //   req.flash("success","Welcome to blogs apps");
-//   //   res.redirect("/");
-//   // });
-//   req.login(use, (err) => {
-//   if (err) {
-//     return res.status(500).send(err.message);
-//   }
+  const hash = await bcrypt.hash(password,10);
+  const use = await user.signup(username,email,hash);
+  // req.login(use,(err)=>{
+  //   if(err){
+  //     return res.send(err);
+  //   }
+  //   req.flash("success","Welcome to blogs apps");
+  //   res.redirect("/");
+  // });
+  req.login(use, (err) => {
+  if (err) {
+    return res.status(500).send(err.message);
+  }
 
-//   req.flash("success", "Welcome to blogs apps");
-//   return res.redirect("/");
-// });
+  req.flash("success", "Welcome to blogs apps");
+  return res.redirect("/");
+});
  
-// }));
+}));
 
-// // login from
-// router.get("/login",(req,res)=>{
+// login from
+router.get("/login",(req,res)=>{
 
-//   res.render("user/login.ejs");
-// });
-//  //login
-// // router.post(
-// //   "/login",
-// //   passport.authenticate("local", {
-// //     failureRedirect:"/login",
-// //     failureFlash:true
-// //   }),
-// //   (req,res)=>{
-// //     req.flash("success","Welcome back");
-// //     res.redirect("/");
-// //   }
-// // );
+  res.render("user/login.ejs");
+});
+ //login
 // router.post(
 //   "/login",
 //   passport.authenticate("local", {
@@ -68,139 +57,42 @@
 //     res.redirect("/");
 //   }
 // );
-
-// // logout
-// router.get("/logout",(req,res)=>{
-//   req.logout((err)=>{
-//     if(err){
-//       return res.send(err);
-//     }
-//     req.flash("success","Logout successful");
-//     res.redirect("/login");
-//   });
-// });
-// // profile
-// router.get("/profile",isLogin,wrapAsync(async(req,res)=>{
-//   const user_id = req.user.id;
-//   const [userInfo] = await user.userinfo(user_id);
-//   const [userAllPost] = await user.userAllPost(user_id);
-//   console.log(userAllPost);
-//   console.log(userInfo);
-//   res.render("user/profile.ejs",{userInfo,userAllPost});
-// }));
-
-// router.post("/profile/upload/:user_id",upload.single("profile"),wrapAsync(async(req,res)=>{
-//   let imag = req.file.path;
-//   await user.inserImage(req.params.user_id,imag);
-//   res.redirect("/profile");
-// }));
-// module.exports = router;
-
-const express = require("express");
-const router = express.Router();
-
-const user = require("../models/user");
-const wrapAsync = require("../utils/wrapAsync");
-const { isLogin } = require("../middleware");
-
-const passport = require("passport"); // ✅ FIX: NEVER import from ./database/passport here
-const bcrypt = require("bcrypt");
-
-const multer = require("multer");
-const { storage } = require("../cloudeconfig");
-const upload = multer({ storage });
-
-/* ---------------- SIGNUP FORM ---------------- */
-router.get("/signup", (req, res) => {
-  res.render("user/signup.ejs");
-});
-
-/* ---------------- SIGNUP ---------------- */
-router.post("/signup", wrapAsync(async (req, res) => {
-  let { username, email, password } = req.body;
-
-  const hash = await bcrypt.hash(password, 10);
-
-  // insert user
-  await user.signup(username, email, hash);
-
-  // 🔥 IMPORTANT: re-fetch full user (Railway safe)
-  const [rows] = await require("../database/db").query(
-    "SELECT * FROM user WHERE email=?",
-    [email]
-  );
-
-  const newUser = rows[0];
-
-  req.login(newUser, (err) => {
-    if (err) {
-      console.log("LOGIN ERROR:", err);
-      return res.status(500).send(err.message);
-    }
-
-    req.flash("success", "Welcome to blogs app");
-    return res.redirect("/");
-  });
-}));
-
-/* ---------------- LOGIN FORM ---------------- */
-router.get("/login", (req, res) => {
-  res.render("user/login.ejs");
-});
-
-/* ---------------- LOGIN ---------------- */
 router.post(
   "/login",
   passport.authenticate("local", {
-    failureRedirect: "/login",
-    failureFlash: true
+    failureRedirect:"/login",
+    failureFlash:true
   }),
-  (req, res) => {
-    req.flash("success", "Welcome back");
+  (req,res)=>{
+    req.flash("success","Welcome back");
     res.redirect("/");
   }
 );
 
-/* ---------------- LOGOUT ---------------- */
-router.get("/logout", (req, res) => {
-  req.logout((err) => {
-    if (err) {
-      console.log(err);
+// logout
+router.get("/logout",(req,res)=>{
+  req.logout((err)=>{
+    if(err){
       return res.send(err);
     }
-    req.flash("success", "Logout successful");
+    req.flash("success","Logout successful");
     res.redirect("/login");
   });
 });
-
-/* ---------------- PROFILE ---------------- */
-router.get("/profile", isLogin, wrapAsync(async (req, res) => {
+// profile
+router.get("/profile",isLogin,wrapAsync(async(req,res)=>{
   const user_id = req.user.id;
-
   const [userInfo] = await user.userinfo(user_id);
   const [userAllPost] = await user.userAllPost(user_id);
-
-  res.render("user/profile.ejs", {
-    userInfo,
-    userAllPost
-  });
+  console.log(userAllPost);
+  console.log(userInfo);
+  res.render("user/profile.ejs",{userInfo,userAllPost});
 }));
 
-/* ---------------- PROFILE IMAGE UPLOAD ---------------- */
-router.post(
-  "/profile/upload/:user_id",
-  upload.single("profile"),
-  wrapAsync(async (req, res) => {
-    if (!req.file) {
-      return res.status(400).send("No file uploaded");
-    }
-
-    let imag = req.file.path;
-
-    await user.inserImage(req.params.user_id, imag);
-
-    res.redirect("/profile");
-  })
-);
-
+router.post("/profile/upload/:user_id",upload.single("profile"),wrapAsync(async(req,res)=>{
+  let imag = req.file.path;
+  await user.inserImage(req.params.user_id,imag);
+  res.redirect("/profile");
+}));
 module.exports = router;
+
